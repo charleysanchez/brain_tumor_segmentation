@@ -23,13 +23,14 @@ def load_data():
     return images, masks
 
 
-def preprocess_image_masks(images, masks):
+def normalize_mri(images: np.ndarray, masks: np.ndarray, percentage_low=1, percentage_high=99) -> np.ndarray:
+    """Normalize multi-modal MRI volumes"""
     # make sure all image values are represented by float32 for numerical stability
     images = images.astype(np.float32)
 
     # establish the percentiles per channel (channel is axis 3)
-    p_low = np.percentile(images, 1, axis=(0, 1, 2), keepdims=True)
-    p_high = np.percentile(images, 99, axis=(0, 1, 2), keepdims=True)
+    p_low = np.percentile(images, percentage_low, axis=(0, 1, 2), keepdims=True)
+    p_high = np.percentile(images, percentage_high, axis=(0, 1, 2), keepdims=True)
 
     # truncate all values of images to the low and high percentiles to get rid of outliers
     images = np.clip(images, p_low, p_high)
@@ -41,4 +42,4 @@ def preprocess_image_masks(images, masks):
     return images, masks
 
 images, masks = load_data()
-images, masks = preprocess_image_masks(images, masks)
+images, masks = normalize_mri(images, masks)
