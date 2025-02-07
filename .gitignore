@@ -6,6 +6,11 @@ __pycache__/
 # C extensions
 *.so
 
+# datasets
+data/raw/*
+*.h5
+*.pkl
+
 # Distribution / packaging
 .Python
 build/
