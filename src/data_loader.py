@@ -7,11 +7,11 @@ import torch
 
 
 
-def load_data():
+def load_data(volume_number):
     images = []
     masks = []
     for i in range(155):
-        file_path = f'../data/raw/Brats2020/BraTS2020_training_data/content/data/volume_1_slice_{i}.h5'
+        file_path = f'../data/raw/Brats2020/BraTS2020_training_data/content/data/volume_{volume_number}_slice_{i}.h5'
         with h5py.File(file_path, 'r') as f:
             image_data = f["image"][:]
             mask_data = f["mask"][:]
