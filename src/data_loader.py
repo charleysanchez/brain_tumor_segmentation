@@ -7,18 +7,19 @@ import torch
 
 
 
-def load_data(volume_number):
+def load_data(vol_range):
     images = []
     masks = []
-    for i in range(155):
-        file_path = f'../data/raw/Brats2020/BraTS2020_training_data/content/data/volume_{volume_number}_slice_{i}.h5'
-        with h5py.File(file_path, 'r') as f:
-            image_data = f["image"][:]
-            mask_data = f["mask"][:]
-            
+    for vol_number in vol_range:
+        for i in range(155):
+            file_path = f'../data/raw/Brats2020/BraTS2020_training_data/content/data/volume_{vol_number}_slice_{i}.h5'
+            with h5py.File(file_path, 'r') as f:
+                image_data = f["image"][:]
+                mask_data = f["mask"][:]
+                
 
-            images.append(image_data)
-            masks.append(mask_data)
+                images.append(image_data)
+                masks.append(mask_data)
 
 
     images = np.array(images)
@@ -55,5 +56,13 @@ def convert_to_pytorch_tensors(images, masks):
     return tensor_images, tensor_masks
 
 
-images, masks = load_data()
-images, masks = normalize_mri(images, masks)
+def preprocess_data(vol_range):
+    images, masks = load_data(images, masks, vol_range)
+    images, masks = normalize_mri(images, masks)
+    tensor_images, tensor_masks = convert_to_pytorch_tensors(images, masks)
+    return tensor_images, tensor_masks
+
+
+if __name__ == "__main__":
+    vol_range = range(1, 370)
+    images, masks = preprocess_data(vol_range)
