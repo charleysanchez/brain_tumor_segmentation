@@ -49,8 +49,8 @@ def transform(images, masks, verbose=True):
     transforms = A.Compose([
         A.HorizontalFlip(p=0.5),
         A.RandomRotate90(p=0.5),
-        A.ElasticTransform(alpha=1, sigma=50, alpha_affine=50, p=0.2),
-        A.GaussNoise(var_limit=(0.01, 0.05), p=0.2),
+        A.ElasticTransform(alpha=1, sigma=50, p=0.2),
+        A.GaussNoise(std_range=(0.01, 0.05), p=0.2),
         A.Normalize(mean=[0.5], std=[0.5]),
         ToTensorV2()
     ])
@@ -59,7 +59,7 @@ def transform(images, masks, verbose=True):
     transformed_masks = []
 
     for image, mask in zip(images, masks):
-        transformed = transforms(image=image, mask=mask)
+        transformed = transforms(image=image.astype(np.float32), mask=mask.astype(np.uint8))
         transformed_images.append(transformed["image"])
         transformed_masks.append(transformed["mask"])
     return transformed_images, transformed_masks 
