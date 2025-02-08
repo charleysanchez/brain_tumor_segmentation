@@ -3,7 +3,7 @@ from torchvision.transforms import v2
 import matplotlib.pyplot as plt
 import numpy as np
 import h5py
-
+import torch
 
 
 
@@ -43,6 +43,17 @@ def normalize_mri(images: np.ndarray, masks: np.ndarray, percentage_low=1, perce
     masks = masks.astype(np.uint8)
 
     return images, masks
+
+
+def convert_to_pytorch_tensors(images, masks):
+    # Permute the array to (N, C, H, W) format where N=155, C=4 (modalities), H=240, W=240
+    tensor_images = torch.from_numpy(images).permute(0, 3, 1, 2)
+
+    # same for the mask
+    tensor_masks = torch.from_numpy(masks).permute(0, 3, 1, 2)
+
+    return tensor_images, tensor_masks
+
 
 images, masks = load_data()
 images, masks = normalize_mri(images, masks)
