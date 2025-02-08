@@ -50,14 +50,14 @@ def transform(images, masks):
     ])
 
     transformed = transforms(image=images, mask=masks)
-    return transformed
+    return transformed["image"], transformed["mask"]
 
 
 def preprocess_data(vol_range):
     images, masks = load_data(images, masks, vol_range)
     tensor_images, tensor_masks = convert_to_pytorch_tensors(images, masks)
-    image_transformed, mask_transformed = 
-    return tensor_images, tensor_masks
+    image_transformed, mask_transformed = transform(tensor_images, tensor_masks)
+    return image_transformed, mask_transformed
 
 
 if __name__ == "__main__":
