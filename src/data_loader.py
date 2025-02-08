@@ -29,7 +29,10 @@ def load_data(vol_range):
     return images, masks
 
 
-def convert_to_pytorch_tensors(images, masks):
+def convert_to_pytorch_tensors(images, masks, verbose=True):
+    if verbose:
+        print("working on convert to pytorch tensor")
+
     # Permute the array to (N, C, H, W) format where N=155, C=4 (modalities), H=240, W=240
     tensor_images = torch.from_numpy(images).permute(0, 3, 1, 2)
 
@@ -39,7 +42,10 @@ def convert_to_pytorch_tensors(images, masks):
     return tensor_images, tensor_masks
 
 
-def transform(images, masks):
+def transform(images, masks, verbose=True):
+    if verbose:
+        print("working on transform")
+
     transforms = A.Compose([
         A.HorizontalFlip(p=0.5),
         A.RandomRotate90(p=0.5),
@@ -49,14 +55,20 @@ def transform(images, masks):
         ToTensorV2()
     ])
 
-    transformed = transforms(image=images, mask=masks)
-    return transformed["image"], transformed["mask"]
+    transformed_images = []
+    transformed_masks = []
+
+    for image, mask in zip(images, masks):
+        transformed = transforms(image=image, mask=mask)
+        transformed_images.append(transformed["image"])
+        transformed_masks.append(transformed["mask"])
+    return transformed_images, transformed_masks 
 
 
 def preprocess_data(vol_range=370):
     images, masks = load_data(vol_range)
-    tensor_images, tensor_masks = convert_to_pytorch_tensors(images, masks)
-    image_transformed, mask_transformed = transform(tensor_images, tensor_masks)
+    # tensor_images, tensor_masks = convert_to_pytorch_tensors(images, masks)
+    image_transformed, mask_transformed = transform(images, masks)
     return image_transformed, mask_transformed
 
 

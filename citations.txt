@@ -9,4 +9,4 @@ brats dataset:
 
 [5] S. Bakas, H. Akbari, A. Sotiras, M. Bilello, M. Rozycki, J. Kirby, et al., "Segmentation Labels and Radiomic Features for the Pre-operative Scans of the TCGA-LGG collection", The Cancer Imaging Archive, 2017. DOI: 10.7937/K9/TCIA.2017.GJQ7R0EF
 
-https://pmc.ncbi.nlm.nih.gov/articles/PMC7085309/ (REFERENCE FOR THE DATA AUGMENTATION USEFULNESS)
+[6] https://pmc.ncbi.nlm.nih.gov/articles/PMC7085309/ (REFERENCE FOR THE DATA AUGMENTATION USEFULNESS)
