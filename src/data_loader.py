@@ -1,5 +1,7 @@
+from albumentation.pytorch import ToTensorV2
 from torchvision.transforms import v2
 
+import albumentations as A
 import matplotlib.pyplot as plt
 import numpy as np
 import h5py
@@ -54,6 +56,12 @@ def convert_to_pytorch_tensors(images, masks):
     tensor_masks = torch.from_numpy(masks).permute(0, 3, 1, 2)
 
     return tensor_images, tensor_masks
+
+
+def transform(images, masks):
+    tranforms = A.Compose([
+        A.HorizontalFlip(p=0.5)
+    ])
 
 
 def preprocess_data(vol_range):
